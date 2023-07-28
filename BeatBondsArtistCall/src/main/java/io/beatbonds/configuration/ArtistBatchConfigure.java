@@ -10,8 +10,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import io.beatbonds.model.Artist;
+
 @Configuration
 public class ArtistBatchConfigure {
+	
+	public static String[] tokens = new String[] {"Artists"};
 	
 	private JobBuilderFactory jobBuilderFactory;
 	
@@ -25,19 +29,20 @@ public class ArtistBatchConfigure {
 	}
 	
 	@Bean
-	public ItemReader<String> itemReader() {
-		return new ArtistItemReader(); 
+	public ItemReader<Artist> itemReader() {
+		return new ArtistItemReader();
+		
 	}
 	
 	@Bean
-	public ItemWriter<String> itemWriter(){
+	public ItemWriter<Artist> itemWriter(){
 		return new ArtistItemWriter();
 	}
 	
 	@Bean
 	public Step chunkBasedStep() {
 		return this.stepBuilderFactory.get("chunkBasedStep")
-				.<String, String>chunk(3)
+				.<Artist, Artist>chunk(3)
 				.reader(itemReader())
 				.writer(itemWriter()).build();
 	}
