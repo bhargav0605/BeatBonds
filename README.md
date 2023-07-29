@@ -4,4 +4,7 @@ BeatBonds initial spring batch service which pulls population and followers of a
 ### Task List
 - [x] POC of ItemProcessor, ItemWriter, ItemReader.
 - [ ] Code Cleanup and Refractoring.
-- [ ] Testing with Sporify API.
+- [x] Testing with Sporify API.
+
+
+- 1st Run with 100 artist (Single Thread) : 24 second in total with full job, 22sec53ms according to batch job log.
