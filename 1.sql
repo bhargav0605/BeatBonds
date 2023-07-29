@@ -17,3 +17,16 @@ CREATE TABLE  artists_details (
     column2_data_type column2_name,
     ... -- Add more columns as needed
 );
+
+CREATE TABLE artists2 (
+    artist_id INT AUTO_INCREMENT PRIMARY KEY,
+    artist VARCHAR(255)
+);
+
+LOAD DATA INFILE '/var/lib/mysql-files/dataset.csv' INTO TABLE artists2 COLUMNS TERMINATED BY ',' LINES TERMINATED BY '\r\n' IGNORE 1 LINES (artist);
+
+
+
+drop database batch_repo;
+create  database batch_repo;
+
