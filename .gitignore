@@ -1,6 +1,7 @@
 /target/
 !.mvn/wrapper/maven-wrapper.jar
 
+./1.sql
 
 ./BeatBondsArtistCall/target/
 !./BeatBondsArtistCall/.mvn/wrapper/maven-wrapper.jar
