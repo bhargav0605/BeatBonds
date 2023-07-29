@@ -28,6 +28,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.Scheduled;
 
 import io.beatbonds.model.Artist;
+import io.beatbonds.shared.SharedData;
 
 @Configuration
 public class ArtistBatchConfigure {
@@ -42,6 +43,8 @@ public class ArtistBatchConfigure {
 	
 	private JobLauncher jobLauncher;
 	
+	private SharedData sharedData;
+	
 	
 	public static String ARTIST_SQL = "select artist "
 			+ "from beatbondsartist.artists order by id";
@@ -50,20 +53,24 @@ public class ArtistBatchConfigure {
 			+ "beatbondsartist.artists2(artist)"
 			+ " values(?)";
 	
-	@Scheduled(cron = "0 */10 * * * *")
+//	@Scheduled(cron = "0 */10 * * * *")
+	@Scheduled(initialDelay = 0, fixedRate = 300000)
 	public void runJob() throws JobExecutionAlreadyRunningException, JobRestartException, JobInstanceAlreadyCompleteException, JobParametersInvalidException, Exception {
 		JobParametersBuilder paramBuilder = new JobParametersBuilder();
 		paramBuilder.addDate("runTime", new Date());
 		this.jobLauncher.run(job(), paramBuilder.toJobParameters());
 	}
-	
+//	
+//	 JobLauncher jobLauncher,
 	@Autowired
 	public ArtistBatchConfigure(JobBuilderFactory jobBuilderFactory,
-			StepBuilderFactory stepBuilderFactory, DataSource dataSource, JobLauncher jobLauncher) {
+			StepBuilderFactory stepBuilderFactory, DataSource dataSource,JobLauncher jobLauncher,
+			SharedData sharedData) {
 		this.jobBuilderFactory=jobBuilderFactory;
 		this.stepBuilderFactory=stepBuilderFactory;
 		this.dataSource=dataSource;
 		this.jobLauncher=jobLauncher;
+		this.sharedData=sharedData;
 	}
 	
 	@Bean
@@ -79,6 +86,7 @@ public class ArtistBatchConfigure {
 	
 	@Bean
 	public ItemWriter<Artist> itemWriter(){
+//		System.out.println("writer: "+sharedData.getSharedToken());
 		return new JdbcBatchItemWriterBuilder<Artist>()
 				.dataSource(dataSource)
 				.sql(INSERT_ARTIST_SQL)
