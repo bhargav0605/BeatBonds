@@ -18,6 +18,9 @@ CREATE TABLE  artists_details (
     ... -- Add more columns as needed
 );
 
+/*
+Only for demo
+*/
 CREATE TABLE artists2 (
     artist_id INT AUTO_INCREMENT PRIMARY KEY,
     artist VARCHAR(255)
@@ -29,4 +32,16 @@ LOAD DATA INFILE '/var/lib/mysql-files/dataset.csv' INTO TABLE artists2 COLUMNS 
 
 drop database batch_repo;
 create  database batch_repo;
+
+ALTER TABLE artists_details
+ADD image VARCHAR(255);
+
+
+CREATE TABLE artists_details (
+    artist_id INT AUTO_INCREMENT PRIMARY KEY,
+    artist VARCHAR(255),
+    popularity BIGINT,
+    followers BIGINT,
+    image VARCHAR(255)
+);
 

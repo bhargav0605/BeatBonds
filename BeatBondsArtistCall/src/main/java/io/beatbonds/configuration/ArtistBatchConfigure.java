@@ -28,12 +28,13 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.Scheduled;
 
 import io.beatbonds.model.Artist;
+import io.beatbonds.model.ArtistDb;
 import io.beatbonds.shared.SharedData;
 
 @Configuration
 public class ArtistBatchConfigure {
 	
-	public static String[] tokens = new String[] {"Artists"};
+//	public static String[] tokens = new String[] {"Artists"};
 	
 	private JobBuilderFactory jobBuilderFactory;
 	
@@ -49,23 +50,30 @@ public class ArtistBatchConfigure {
 	public static String ARTIST_SQL = "select artist "
 			+ "from beatbondsartist.artists order by id";
 	
-	public static String INSERT_ARTIST_SQL = "insert into "
-			+ "beatbondsartist.artists2(artist)"
-			+ " values(?)";
+//	public static String INSERT_ARTIST_SQL = "insert into "
+//			+ "beatbondsartist.artists2(artist)"
+//			+ " values(?)";
 	
-//	@Scheduled(cron = "0 */10 * * * *")
+	public static String INSERT_ARTIST_SQL = "insert into "
+			+ "beatbondsartist.artists_details(artist, popularity, followers, image)"
+			+ " values(?,?,?,?)";
+	
 	@Scheduled(initialDelay = 0, fixedRate = 300000)
 	public void runJob() throws JobExecutionAlreadyRunningException, JobRestartException, JobInstanceAlreadyCompleteException, JobParametersInvalidException, Exception {
 		JobParametersBuilder paramBuilder = new JobParametersBuilder();
 		paramBuilder.addDate("runTime", new Date());
 		this.jobLauncher.run(job(), paramBuilder.toJobParameters());
 	}
-//	
+	
 //	 JobLauncher jobLauncher,
-	@Autowired
-	public ArtistBatchConfigure(JobBuilderFactory jobBuilderFactory,
-			StepBuilderFactory stepBuilderFactory, DataSource dataSource,JobLauncher jobLauncher,
-			SharedData sharedData) {
+	@Autowired//
+	public ArtistBatchConfigure(
+			JobBuilderFactory jobBuilderFactory,
+			StepBuilderFactory stepBuilderFactory, 
+			DataSource dataSource,
+			JobLauncher jobLauncher,
+			SharedData sharedData
+			) {
 		this.jobBuilderFactory=jobBuilderFactory;
 		this.stepBuilderFactory=stepBuilderFactory;
 		this.dataSource=dataSource;
@@ -85,9 +93,9 @@ public class ArtistBatchConfigure {
 	}
 	
 	@Bean
-	public ItemWriter<Artist> itemWriter(){
+	public ItemWriter<ArtistDb> itemWriter(){
 //		System.out.println("writer: "+sharedData.getSharedToken());
-		return new JdbcBatchItemWriterBuilder<Artist>()
+		return new JdbcBatchItemWriterBuilder<ArtistDb>()
 				.dataSource(dataSource)
 				.sql(INSERT_ARTIST_SQL)
 				.itemPreparedStatementSetter(new ArtistItemPreparedStatementSetter())
@@ -95,7 +103,7 @@ public class ArtistBatchConfigure {
 	}
 	
 	@Bean
-	public ItemProcessor<Artist, Artist> trackedArtistItemProcessor() {
+	public ItemProcessor<Artist, ArtistDb> trackedArtistItemProcessor() {
 		return new FetchedArtistItemProcessor(); 
 	}
 	
@@ -112,7 +120,7 @@ public class ArtistBatchConfigure {
 	@Bean
 	public Step chunkBasedStep() throws Exception {
 		return this.stepBuilderFactory.get("chunkBasedStep")
-				.<Artist, Artist>chunk(10)
+				.<Artist, ArtistDb>chunk(10)
 				.reader(itemReader())
 				.processor(trackedArtistItemProcessor())
 				.writer(itemWriter()).build();

@@ -12,9 +12,10 @@ import org.springframework.batch.item.ItemProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import io.beatbonds.model.Artist;
+import io.beatbonds.model.ArtistDb;
 import io.beatbonds.shared.SharedData;
 
-public class FetchedArtistItemProcessor implements ItemProcessor<Artist, Artist> {
+public class FetchedArtistItemProcessor implements ItemProcessor<Artist, ArtistDb> {
 	
 	@Autowired
 	private SharedData sharedData;
@@ -23,8 +24,11 @@ public class FetchedArtistItemProcessor implements ItemProcessor<Artist, Artist>
 
 
 	@Override
-	public Artist process(Artist item) throws Exception {
-		Artist artst = new Artist();
+	public ArtistDb process(Artist item) throws Exception {
+
+		ArtistDb artstDb = new ArtistDb();
+		
+		
 		String apiUrl = "https://api.spotify.com/v1/search";
 		
 		String q = item.getName().contains(" ")?item.getName().replaceAll(" ", "%20") : item.getName(); 
@@ -34,6 +38,9 @@ public class FetchedArtistItemProcessor implements ItemProcessor<Artist, Artist>
 		String offset = "0";
 		
 		Long popularity=0L;
+		String nameArt;
+		Long followers=0l;
+		String image="";
 		
 		apiUrl += "?q="+q+"&type="+type+"&limit="+limit+"&offset="+offset;
 
@@ -58,14 +65,20 @@ public class FetchedArtistItemProcessor implements ItemProcessor<Artist, Artist>
 
                     JSONObject jsonResponse = new JSONObject(response.toString());
 
-                    JSONObject something = new JSONObject();
-                    something = (JSONObject) jsonResponse.getJSONObject("artists").getJSONArray("items").get(0);
-
+                    JSONObject itemsArr = new JSONObject();
+                    JSONObject imageArr = new JSONObject();
+                    itemsArr = (JSONObject) jsonResponse.getJSONObject("artists").getJSONArray("items").get(0);
+                    imageArr = (JSONObject)itemsArr.getJSONArray("images").get(0);
+                    image = imageArr.getString("url");
+                    
                     logger.info("##########################################");
-                    logger.info("Popularity: "+something.getLong("popularity"));
-                    popularity=something.getLong("popularity");
-                    logger.info("Followers: "+something.getJSONObject("followers").getLong("total"));
-                    logger.info("Name: "+something.getString("name"));
+
+                    popularity=itemsArr.getLong("popularity");
+                    followers=itemsArr.getJSONObject("followers").getLong("total");
+                    nameArt=itemsArr.getString("name");
+                    image = imageArr.getString("url");
+
+                    logger.info(popularity+" "+followers+" "+nameArt+" "+image);
               
                 }
             } else {
@@ -78,8 +91,12 @@ public class FetchedArtistItemProcessor implements ItemProcessor<Artist, Artist>
 			e.getMessage();
 		}
 		
-		artst.setName(Long.toString(popularity));
-		return artst;
+//		artst.setName(Long.toString(popularity));
+        artstDb.setName(item.getName());
+        artstDb.setPopularity(popularity);
+        artstDb.setFollowers(followers);
+        artstDb.setImage(image);
+		return artstDb;
 	}
 
 }
