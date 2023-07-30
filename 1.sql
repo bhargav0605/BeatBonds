@@ -36,7 +36,7 @@ create  database batch_repo;
 ALTER TABLE artists_details
 ADD image VARCHAR(255);
 
-
+DROP TABLE IF EXISTS artists_details;
 CREATE TABLE artists_details (
     artist_id INT AUTO_INCREMENT PRIMARY KEY,
     artist VARCHAR(255),

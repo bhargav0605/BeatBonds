@@ -10,9 +10,12 @@ import java.util.Base64;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import javax.sql.DataSource;
 
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import io.beatbonds.shared.SharedData;
@@ -30,7 +33,6 @@ public class TimeCalculation {
 	public TimeCalculation(SharedData sharedData) {
 		this.sharedData=sharedData;
 	}
-	
 	
     @PostConstruct
     public void init() {
@@ -68,8 +70,7 @@ public class TimeCalculation {
                     StringBuilder response = new StringBuilder();
                     while ((inputLine = in.readLine()) != null) {
                         response.append(inputLine);
-                    }
-                    System.out.println("Response: " + response.toString());
+                    }                    
                     
                  // Parse the JSON response
                     JSONObject jsonResponse = new JSONObject(response.toString());
@@ -79,7 +80,6 @@ public class TimeCalculation {
                     int expiresIn = jsonResponse.getInt("expires_in");
                     String tokenType = jsonResponse.getString("token_type");
                     
-                 // Do something with the retrieved parameters
                     token = accessToken;
                     sharedData.setSharedToken(accessToken);
                     System.out.println("Access Token: " + token);
