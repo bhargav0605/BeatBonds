@@ -25,7 +25,9 @@ import org.springframework.batch.item.database.support.SqlPagingQueryProviderFac
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.task.TaskExecutor;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import io.beatbonds.model.Artist;
 import io.beatbonds.model.ArtistDb;
@@ -117,13 +119,24 @@ public class ArtistBatchConfigure {
 		factory.setDataSource(dataSource);
 		return factory.getObject();
 	}
+	
+	@Bean
+	public TaskExecutor taskExecutor() {
+		ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
+		executor.setCorePoolSize(6);
+		executor.setMaxPoolSize(20);
+		return executor;
+	}
+	
 	@Bean
 	public Step chunkBasedStep() throws Exception {
 		return this.stepBuilderFactory.get("chunkBasedStep")
 				.<Artist, ArtistDb>chunk(10)
 				.reader(itemReader())
 				.processor(trackedArtistItemProcessor())
-				.writer(itemWriter()).build();
+				.writer(itemWriter())
+				.taskExecutor(taskExecutor())
+				.build();
 	}
 
 	@Bean
