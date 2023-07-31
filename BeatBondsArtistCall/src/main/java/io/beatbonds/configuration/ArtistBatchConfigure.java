@@ -57,7 +57,10 @@ public class ArtistBatchConfigure {
 	public static String INSERT_ARTIST_SQL = 
 			"insert into beatbondsartist.artists_details(artist, popularity, followers, image) values(?,?,?,?)";
 	
-	@Scheduled(initialDelay = 0, fixedRate = 300000)
+	
+//	fixedRate = 3 * 60 * 60 * 1000
+//	fixedRate = 300000 (5 min)
+	@Scheduled(initialDelay = 0, fixedRate = 3 * 60 * 60 * 1000)
 	public void runJob() throws JobExecutionAlreadyRunningException, JobRestartException, JobInstanceAlreadyCompleteException, JobParametersInvalidException, Exception {
 		JobParametersBuilder paramBuilder = new JobParametersBuilder();
 		paramBuilder.addDate("runTime", new Date());
