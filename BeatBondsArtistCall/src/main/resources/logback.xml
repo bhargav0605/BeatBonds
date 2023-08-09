@@ -1,7 +1,12 @@
 <configuration>
 
-	<appender name="FILE" class="ch.qos.logback.core.FileAppender">
-		<file>/home/bhargav/beatbonds-logs/application.log</file>
+	<!-- <appender name="FILE" class="ch.qos.logback.core.FileAppender">  -->
+	<appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>/home/bhargav/beatbonds-logs/BeatBondsArtistCall.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <FileNamePattern>/home/bhargav/beatbonds-logs/BeatBondsArtistCall-%d{yyyy-MM-dd}.log</FileNamePattern>
+            <MaxHistory>7</MaxHistory> <!-- Keep logs for 7 days -->
+        </rollingPolicy>
         <encoder>
             <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
         </encoder>

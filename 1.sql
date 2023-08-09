@@ -45,3 +45,8 @@ CREATE TABLE artists_details (
     image VARCHAR(255)
 );
 
+
+CREATE TABLE artist_details (
+    artist_id INT AUTO_INCREMENT PRIMARY KEY,
+    artist VARCHAR(255)
+);

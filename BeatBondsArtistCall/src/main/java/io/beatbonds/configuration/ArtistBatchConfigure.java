@@ -36,8 +36,6 @@ import io.beatbonds.shared.SharedData;
 @Configuration
 public class ArtistBatchConfigure {
 	
-//	public static String[] tokens = new String[] {"Artists"};
-	
 	private JobBuilderFactory jobBuilderFactory;
 	
 	private StepBuilderFactory stepBuilderFactory;

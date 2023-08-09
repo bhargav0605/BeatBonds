@@ -15,5 +15,4 @@ public class ArtistRowMapper implements RowMapper<Artist> {
 		artist.setName(rs.getString("artist"));
 		return artist;
 	}
-
 }
