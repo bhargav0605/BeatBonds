@@ -1,10 +1,12 @@
 /target/
 !.mvn/wrapper/maven-wrapper.jar
 
-./1.sql
+1.sql
 
 ./BeatBondsArtistCall/target/
+./BeatBondsArtistCalculatePrice/target/
 !./BeatBondsArtistCall/.mvn/wrapper/maven-wrapper.jar
+!./BeatBondsArtistCalculatePrice/.mvn/wrapper/maven-wrapper.jar
 
 ### STS ###
 .apt_generated
