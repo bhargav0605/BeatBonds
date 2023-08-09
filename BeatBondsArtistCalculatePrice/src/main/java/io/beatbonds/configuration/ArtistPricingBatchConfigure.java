@@ -1,11 +1,12 @@
 package io.beatbonds.configuration;
 
-import java.util.concurrent.ThreadPoolExecutor;
-
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
+import org.springframework.batch.item.ItemProcessor;
+import org.springframework.batch.item.ItemReader;
+import org.springframework.batch.item.ItemWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,6 +28,23 @@ public class ArtistPricingBatchConfigure {
 	}
 	// Create ItemWiter, ItemReader, ItemProcessor
 	
+	@Bean
+	public ItemReader<String> itemReader(){
+		// needs configuration with datasource
+		return new ArtistDataReader().itemReader();
+	}
+	
+	@Bean
+	public ItemWriter<String> itemWriter(){
+		return null;
+	}
+	
+	@Bean
+	public ItemProcessor<String, String> itemProcessor(){
+		return null;
+	}
+	
+	// Ended writer and processor and reader
 	@Bean
 	public TaskExecutor taskExecutor() {
 		// configuration of pool size and thread size
