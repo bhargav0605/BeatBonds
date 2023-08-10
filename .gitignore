@@ -3,10 +3,10 @@
 
 1.sql
 
-./BeatBondsArtistCall/target/
-./BeatBondsArtistCalculatePrice/target/
-!./BeatBondsArtistCall/.mvn/wrapper/maven-wrapper.jar
-!./BeatBondsArtistCalculatePrice/.mvn/wrapper/maven-wrapper.jar
+/BeatBondsArtistCall/target/
+/BeatBondsArtistCalculatePrice/target/
+!/BeatBondsArtistCall/.mvn/wrapper/maven-wrapper.jar
+!/BeatBondsArtistCalculatePrice/.mvn/wrapper/maven-wrapper.jar
 
 ### STS ###
 .apt_generated
