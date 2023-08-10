@@ -1,5 +1,7 @@
 package io.beatbonds.configuration;
 
+import javax.sql.DataSource;
+
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
@@ -7,11 +9,16 @@ import org.springframework.batch.core.configuration.annotation.StepBuilderFactor
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
+import org.springframework.batch.item.database.PagingQueryProvider;
+import org.springframework.batch.item.database.builder.JdbcPagingItemReaderBuilder;
+import org.springframework.batch.item.database.support.SqlPagingQueryProviderFactoryBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
+
+import io.beatbonds.model.ArtistDb;
 
 @Configuration
 public class ArtistPricingBatchConfigure {
@@ -20,34 +27,45 @@ public class ArtistPricingBatchConfigure {
 	
 	private StepBuilderFactory stepBuilderFactory;
 	
+	private DataSource dataSource;
+	
 	@Autowired
 	public ArtistPricingBatchConfigure(JobBuilderFactory jobBuilderFactory,
-				StepBuilderFactory stepBuilderFactory) {
+				StepBuilderFactory stepBuilderFactory,
+				DataSource dataSource) {
 		this.jobBuilderFactory=jobBuilderFactory;
 		this.stepBuilderFactory=stepBuilderFactory;
+		this.dataSource=dataSource;
 	}
-	// Create ItemWiter, ItemReader, ItemProcessor
 	
 	@Bean
-	public ItemReader<String> itemReader(){
-		// needs configuration with datasource
-		return new ArtistDataReader().itemReader();
+	public PagingQueryProvider queryProvider() throws Exception {
+		SqlPagingQueryProviderFactoryBean factory = new SqlPagingQueryProviderFactoryBean();
+		factory.setSelectClause("select artist_id, artist, popularity, followers, image");
+		factory.setFromClause("from beatbondsartist.artists_details");
+		factory.setSortKey("artist_id");
+		factory.setDataSource(dataSource);
+		return factory.getObject();
+	}
+	
+	@Bean
+	public ItemReader<ArtistDb> itemReader() throws Exception{
+		return new ArtistDataReader(dataSource).itemReader();
 	}
 	
 	@Bean
 	public ItemWriter<String> itemWriter(){
-		return null;
+		return new ArtistDbItemWriter();
 	}
 	
 	@Bean
-	public ItemProcessor<String, String> itemProcessor(){
-		return null;
+	public ItemProcessor<ArtistDb, String> itemProcessor(){
+		return new ArtistDbItemProcessor();
 	}
 	
-	// Ended writer and processor and reader
+
 	@Bean
 	public TaskExecutor taskExecutor() {
-		// configuration of pool size and thread size
 		ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
 		executor.setCorePoolSize(6);
 		executor.setMaxPoolSize(20);
@@ -55,16 +73,20 @@ public class ArtistPricingBatchConfigure {
 	}
 	
 	@Bean
-	public Step chunkBasedStep() {
-		// configure reader, writer, processor, task executor(multithreading)
-		return null;
+	public Step chunkBasedStep() throws Exception {
+		return this.stepBuilderFactory.get("artistDbChunkBasedStep")
+				.<ArtistDb, String>chunk(10)
+				.reader(itemReader())
+				.processor(itemProcessor())
+				.writer(itemWriter())
+				.taskExecutor(taskExecutor())
+				.build();
 	}
 	
 	@Bean
-	public Job job() {
-		
-		// Configure all the steps one after another if multiple
-		return null;
+	public Job job() throws Exception {
+		return this.jobBuilderFactory.get("artistDbJob")
+				.start(chunkBasedStep())
+				.build();
 	}
-
 }

@@ -1,20 +1,48 @@
 package io.beatbonds.configuration;
 
-import org.springframework.batch.item.ItemReader;
-import org.springframework.batch.item.database.builder.JdbcPagingItemReaderBuilder;
+import javax.sql.DataSource;
 
-public class ArtistDataReader{
+import org.springframework.batch.item.ItemReader;
+import org.springframework.batch.item.NonTransientResourceException;
+import org.springframework.batch.item.ParseException;
+import org.springframework.batch.item.UnexpectedInputException;
+import org.springframework.batch.item.database.PagingQueryProvider;
+import org.springframework.batch.item.database.builder.JdbcPagingItemReaderBuilder;
+import org.springframework.batch.item.database.support.SqlPagingQueryProviderFactoryBean;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
+
+import io.beatbonds.model.ArtistDb;
+
+public class ArtistDataReader {
+	private DataSource dataSource;
 	
-	private JdbcPagingItemReaderBuilder<String> jdbcPagingItemReader;
+	@Autowired
+	public ArtistDataReader(DataSource dataSource) {
+		this.dataSource=dataSource;
+	}
 	
-	public ItemReader<String> itemReader(){
-		this.jdbcPagingItemReader = new JdbcPagingItemReaderBuilder<String>();
-		return jdbcPagingItemReader.dataSource(null)
-			.name(null)
-			.queryProvider(null)
-			.rowMapper(null)
-			.pageSize(0)
+	private JdbcPagingItemReaderBuilder<ArtistDb> jdbcPagingItemReader;
+	
+	public ItemReader<ArtistDb> itemReader() throws Exception{
+		this.jdbcPagingItemReader = new JdbcPagingItemReaderBuilder<ArtistDb>();
+		return jdbcPagingItemReader.dataSource(dataSource)
+			.name("jdbcCursorItemReaderPricing")
+			.queryProvider(queryProvider())
+			.rowMapper(new ArtistDbRowMapper())
+			.pageSize(10)
 			.build();
 	}
-
+	
+	public PagingQueryProvider queryProvider() throws Exception {
+		SqlPagingQueryProviderFactoryBean factory = new SqlPagingQueryProviderFactoryBean();
+		// Need column names
+		factory.setSelectClause("select artist_id, artist, popularity, followers, image");
+		factory.setFromClause("from beatbondsartist.artists_details");
+		factory.setSortKey("artist_id");
+		factory.setDataSource(dataSource);
+		return factory.getObject();
+	}
 }
