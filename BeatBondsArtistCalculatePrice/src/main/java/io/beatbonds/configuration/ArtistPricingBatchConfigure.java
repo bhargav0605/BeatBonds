@@ -10,7 +10,6 @@ import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.batch.item.database.PagingQueryProvider;
-import org.springframework.batch.item.database.builder.JdbcPagingItemReaderBuilder;
 import org.springframework.batch.item.database.support.SqlPagingQueryProviderFactoryBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -19,6 +18,7 @@ import org.springframework.core.task.TaskExecutor;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import io.beatbonds.model.ArtistDb;
+import io.beatbonds.model.ArtistPricedDb;
 
 @Configuration
 public class ArtistPricingBatchConfigure {
@@ -54,12 +54,12 @@ public class ArtistPricingBatchConfigure {
 	}
 	
 	@Bean
-	public ItemWriter<String> itemWriter(){
+	public ItemWriter<ArtistPricedDb> itemWriter(){
 		return new ArtistDbItemWriter();
 	}
 	
 	@Bean
-	public ItemProcessor<ArtistDb, String> itemProcessor(){
+	public ItemProcessor<ArtistDb, ArtistPricedDb> itemProcessor(){
 		return new ArtistDbItemProcessor();
 	}
 	
@@ -75,7 +75,7 @@ public class ArtistPricingBatchConfigure {
 	@Bean
 	public Step chunkBasedStep() throws Exception {
 		return this.stepBuilderFactory.get("artistDbChunkBasedStep")
-				.<ArtistDb, String>chunk(10)
+				.<ArtistDb, ArtistPricedDb>chunk(10)
 				.reader(itemReader())
 				.processor(itemProcessor())
 				.writer(itemWriter())

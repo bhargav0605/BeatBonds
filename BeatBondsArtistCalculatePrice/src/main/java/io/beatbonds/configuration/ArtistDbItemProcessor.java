@@ -1,17 +1,22 @@
 package io.beatbonds.configuration;
 
 import org.springframework.batch.item.ItemProcessor;
-import org.springframework.stereotype.Component;
 
 import io.beatbonds.model.ArtistDb;
+import io.beatbonds.model.ArtistPricedDb;
 
 //@Component
-public class ArtistDbItemProcessor implements ItemProcessor<ArtistDb, String>{
+public class ArtistDbItemProcessor implements ItemProcessor<ArtistDb, ArtistPricedDb>{
 
 	@Override
-	public String process(ArtistDb item) throws Exception {
-		String str = Long.toString(item.getPopularity()+10000);
-		return str;
+	public ArtistPricedDb process(ArtistDb item) throws Exception {
+		ArtistPricedDb artistPricedDb = new ArtistPricedDb();
+		artistPricedDb.setName(item.getName());
+		artistPricedDb.setPopularity(item.getPopularity());
+		artistPricedDb.setFollowers(item.getFollowers());
+		artistPricedDb.setImage(item.getImage());
+		artistPricedDb.setPrice(item.getPopularity()+1000);
+		return artistPricedDb;
 	}
 
 }
