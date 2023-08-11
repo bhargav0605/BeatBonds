@@ -27,7 +27,6 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import io.beatbonds.model.Artist;
 import io.beatbonds.model.ArtistFromSpotify;
-import io.beatbonds.shared.SharedTokenData;
 
 @Configuration
 public class ArtistBatchConfigure {

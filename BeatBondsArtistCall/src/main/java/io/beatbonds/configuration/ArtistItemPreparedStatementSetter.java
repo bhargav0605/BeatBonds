@@ -5,7 +5,6 @@ import java.sql.SQLException;
 
 import org.springframework.batch.item.database.ItemPreparedStatementSetter;
 
-import io.beatbonds.model.Artist;
 import io.beatbonds.model.ArtistFromSpotify;
 
 public class ArtistItemPreparedStatementSetter implements ItemPreparedStatementSetter<ArtistFromSpotify> {
