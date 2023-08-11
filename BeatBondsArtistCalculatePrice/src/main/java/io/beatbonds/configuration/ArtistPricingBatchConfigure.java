@@ -27,6 +27,7 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import io.beatbonds.model.ArtistFromSpotifyDb;
 import io.beatbonds.model.ArtistWithCalculatedPrice;
+import io.beatbonds.service.ArtistCalculatePricingService;
 
 @Configuration
 public class ArtistPricingBatchConfigure {
@@ -41,17 +42,21 @@ public class ArtistPricingBatchConfigure {
 	
 	private JdbcTemplate jdbcTemplate;
 	
+	private ArtistCalculatePricingService artistCalculatePricingService;
+	
 	@Autowired
 	public ArtistPricingBatchConfigure(JobBuilderFactory jobBuilderFactory,
 				StepBuilderFactory stepBuilderFactory,
 				DataSource dataSource,
 				JobLauncher jobLauncher,
-				JdbcTemplate jdbcTemplate) {
+				JdbcTemplate jdbcTemplate,
+				ArtistCalculatePricingService artistCalculatePricingService) {
 		this.jobBuilderFactory=jobBuilderFactory;
 		this.stepBuilderFactory=stepBuilderFactory;
 		this.dataSource=dataSource;
 		this.jobLauncher=jobLauncher;
 		this.jdbcTemplate=jdbcTemplate;
+		this.artistCalculatePricingService=artistCalculatePricingService;
 	}
 	
 // Writing in DB1(SQL) completed. NoSQL remaining.
@@ -77,7 +82,7 @@ public class ArtistPricingBatchConfigure {
 	
 	@Bean
 	public ItemProcessor<ArtistFromSpotifyDb, ArtistWithCalculatedPrice> itemProcessor(){
-		return new ArtistPricingItemProcessor();
+		return new ArtistPricingItemProcessor(artistCalculatePricingService);
 	}
 	
 
