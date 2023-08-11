@@ -13,12 +13,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import io.beatbonds.model.Artist;
 import io.beatbonds.model.ArtistFromSpotify;
-import io.beatbonds.shared.SharedData;
+import io.beatbonds.shared.SharedTokenData;
 
 public class ArtistItemProcessor implements ItemProcessor<Artist, ArtistFromSpotify> {
 	
 	@Autowired
-	private SharedData sharedData;
+	private SharedTokenData sharedData;
 	
     private static final Logger logger = LoggerFactory.getLogger(ArtistItemProcessor.class);
 

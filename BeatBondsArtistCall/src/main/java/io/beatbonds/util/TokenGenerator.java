@@ -18,7 +18,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
-import io.beatbonds.shared.SharedData;
+import io.beatbonds.shared.SharedTokenData;
 
 @Component
 public class TokenGenerator {
@@ -27,10 +27,10 @@ public class TokenGenerator {
 	
 	private String token;
 	private int tokenTime;
-	private SharedData sharedData;
+	private SharedTokenData sharedData;
 	
 	@Autowired
-	public TokenGenerator(SharedData sharedData) {
+	public TokenGenerator(SharedTokenData sharedData) {
 		this.sharedData=sharedData;
 	}
 	

@@ -3,15 +3,15 @@ package io.beatbonds.shared;
 import org.springframework.stereotype.Component;
 
 @Component
-public class SharedData {
+public class SharedTokenData {
 	
 	private String sharedToken;
 
-	public SharedData() {
+	public SharedTokenData() {
 		super();
 	}
 
-	public SharedData(String sharedToken) {
+	public SharedTokenData(String sharedToken) {
 		super();
 		this.sharedToken = sharedToken;
 	}

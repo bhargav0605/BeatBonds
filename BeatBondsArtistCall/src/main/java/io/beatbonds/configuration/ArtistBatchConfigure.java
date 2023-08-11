@@ -31,7 +31,7 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import io.beatbonds.model.Artist;
 import io.beatbonds.model.ArtistFromSpotify;
-import io.beatbonds.shared.SharedData;
+import io.beatbonds.shared.SharedTokenData;
 
 @Configuration
 public class ArtistBatchConfigure {
@@ -44,7 +44,7 @@ public class ArtistBatchConfigure {
 	
 	private JobLauncher jobLauncher;
 	
-	private SharedData sharedData;
+	private SharedTokenData sharedData;
 	
 	private JdbcTemplate jdbcTemplate;
 	
@@ -61,7 +61,7 @@ public class ArtistBatchConfigure {
 			StepBuilderFactory stepBuilderFactory, 
 			DataSource dataSource,
 			JobLauncher jobLauncher,
-			SharedData sharedData,
+			SharedTokenData sharedData,
 			JdbcTemplate jdbcTemplate
 			) {
 		this.jobBuilderFactory=jobBuilderFactory;
