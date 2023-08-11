@@ -2,7 +2,7 @@
 
 	<!-- <appender name="FILE" class="ch.qos.logback.core.FileAppender">  -->
 	<appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-		<file>/home/bhargav/beatbonds-logs/BeatBondsArtistCall.log</file>
+		<!-- <file>/home/bhargav/beatbonds-logs/BeatBondsArtistCall.log</file>  -->
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <FileNamePattern>/home/bhargav/beatbonds-logs/BeatBondsArtistCall-%d{yyyy-MM-dd}.log</FileNamePattern>
             <MaxHistory>7</MaxHistory> <!-- Keep logs for 7 days -->
