@@ -15,12 +15,12 @@ import io.beatbonds.model.Artist;
 import io.beatbonds.model.ArtistDb;
 import io.beatbonds.shared.SharedData;
 
-public class FetchedArtistItemProcessor implements ItemProcessor<Artist, ArtistDb> {
+public class ArtistItemProcessor implements ItemProcessor<Artist, ArtistDb> {
 	
 	@Autowired
 	private SharedData sharedData;
 	
-    private static final Logger logger = LoggerFactory.getLogger(FetchedArtistItemProcessor.class);
+    private static final Logger logger = LoggerFactory.getLogger(ArtistItemProcessor.class);
 
 
 	@Override

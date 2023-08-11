@@ -55,16 +55,6 @@ public class ArtistBatchConfigure {
 	public static String INSERT_ARTIST_SQL = 
 			"insert into beatbondsartist.artists_details(artist, popularity, followers, image) values(?,?,?,?)";
 	
-	
-//	fixedRate = 3 * 60 * 60 * 1000
-//	fixedRate = 300000 (5 min)
-	@Scheduled(initialDelay = 0, fixedRate = 3 * 60 * 60 * 1000)
-	public void runJob() throws JobExecutionAlreadyRunningException, JobRestartException, JobInstanceAlreadyCompleteException, JobParametersInvalidException, Exception {
-		JobParametersBuilder paramBuilder = new JobParametersBuilder();
-		paramBuilder.addDate("runTime", new Date());
-		this.jobLauncher.run(job(), paramBuilder.toJobParameters());
-	}
-
 	@Autowired
 	public ArtistBatchConfigure(
 			JobBuilderFactory jobBuilderFactory,
@@ -82,39 +72,28 @@ public class ArtistBatchConfigure {
 		this.jdbcTemplate=jdbcTemplate;
 	}
 	
+//	fixedRate = 3 * 60 * 60 * 1000
+//	fixedRate = 300000 (5 min)
+	@Scheduled(initialDelay = 0, fixedRate = 3 * 60 * 60 * 1000)
+	public void runJob() throws JobExecutionAlreadyRunningException, JobRestartException, JobInstanceAlreadyCompleteException, JobParametersInvalidException, Exception {
+		JobParametersBuilder paramBuilder = new JobParametersBuilder();
+		paramBuilder.addDate("runTime", new Date());
+		this.jobLauncher.run(job(), paramBuilder.toJobParameters());
+	}
+
 	@Bean
 	public ItemReader<Artist> itemReader() throws Exception {
-		return new JdbcPagingItemReaderBuilder<Artist>()
-				.dataSource(dataSource)
-				.name("jdbcCursorItemReader")
-				.queryProvider(queryProvider())
-				.rowMapper(new ArtistRowMapper())
-				.pageSize(10)
-				.build();
+		return new ArtistItemReader(dataSource).itemReader();
 	}
 	
 	@Bean
 	public ItemWriter<ArtistDb> itemWriter(){
-		return new JdbcBatchItemWriterBuilder<ArtistDb>()
-				.dataSource(dataSource)
-				.sql(INSERT_ARTIST_SQL)
-				.itemPreparedStatementSetter(new ArtistItemPreparedStatementSetter())
-				.build();
+		return new ArtistItemWriter(dataSource).itemWriter();
 	}
 	
 	@Bean
 	public ItemProcessor<Artist, ArtistDb> trackedArtistItemProcessor() {
-		return new FetchedArtistItemProcessor(); 
-	}
-	
-	@Bean
-	public PagingQueryProvider queryProvider() throws Exception {
-		SqlPagingQueryProviderFactoryBean factory = new SqlPagingQueryProviderFactoryBean();
-		factory.setSelectClause("select id, artist");
-		factory.setFromClause("from beatbondsartist.artists");
-		factory.setSortKey("id");
-		factory.setDataSource(dataSource);
-		return factory.getObject();
+		return new ArtistItemProcessor(); 
 	}
 	
 	@Bean

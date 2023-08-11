@@ -1,4 +1,4 @@
-package io.beatbonds.configuration;
+package io.beatbonds.util;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -21,7 +21,7 @@ import org.springframework.stereotype.Component;
 import io.beatbonds.shared.SharedData;
 
 @Component
-public class TimeCalculation {
+public class TokenGenerator {
 	
 	private long startTime;
 	
@@ -30,7 +30,7 @@ public class TimeCalculation {
 	private SharedData sharedData;
 	
 	@Autowired
-	public TimeCalculation(SharedData sharedData) {
+	public TokenGenerator(SharedData sharedData) {
 		this.sharedData=sharedData;
 	}
 	
