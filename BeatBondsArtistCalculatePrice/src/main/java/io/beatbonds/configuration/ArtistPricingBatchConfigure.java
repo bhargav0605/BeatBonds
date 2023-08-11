@@ -69,17 +69,17 @@ public class ArtistPricingBatchConfigure {
 	
 	@Bean
 	public ItemReader<ArtistFromSpotifyDb> itemReader() throws Exception{
-		return new ArtistDataReader(dataSource).itemReader();
+		return new ArtistPricingItemReader(dataSource).itemReader();
 	}
 	
 	@Bean
 	public ItemWriter<ArtistWithCalculatedPrice> itemWriter(){
-		return new ArtistDbItemWriter(dataSource).itemWriter();
+		return new ArtistPricingItemWriter(dataSource).itemWriter();
 	}
 	
 	@Bean
 	public ItemProcessor<ArtistFromSpotifyDb, ArtistWithCalculatedPrice> itemProcessor(){
-		return new ArtistDbItemProcessor();
+		return new ArtistPricingItemProcessor();
 	}
 	
 

@@ -12,14 +12,14 @@ import org.springframework.stereotype.Component;
 import io.beatbonds.model.ArtistWithCalculatedPrice;
 
 //@Component
-public class ArtistDbItemWriter {
+public class ArtistPricingItemWriter {
 //	public class ArtistDbItemWriter implements ItemWriter<ArtistPricedDb>{
 	private DataSource dataSource;
 	
 	private JdbcBatchItemWriterBuilder<ArtistWithCalculatedPrice> jdbcBatchItemWriter;
 	
 	@Autowired
-	public ArtistDbItemWriter(DataSource dataSource) {
+	public ArtistPricingItemWriter(DataSource dataSource) {
 		this.dataSource=dataSource;
 	}
 	
@@ -38,7 +38,7 @@ public class ArtistDbItemWriter {
 		return jdbcBatchItemWriter
 			.dataSource(dataSource)
 			.sql(INSERT_ARTIST_PRICING_SQL)
-			.itemPreparedStatementSetter(new ArtistDbItemPreparedStatementSetter())
+			.itemPreparedStatementSetter(new ArtistPricingItemPreparedStatementSetter())
 			.build();
 	}
 }

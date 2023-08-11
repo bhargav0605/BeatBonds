@@ -16,11 +16,11 @@ import org.springframework.stereotype.Component;
 
 import io.beatbonds.model.ArtistFromSpotifyDb;
 
-public class ArtistDataReader {
+public class ArtistPricingItemReader {
 	private DataSource dataSource;
 	
 	@Autowired
-	public ArtistDataReader(DataSource dataSource) {
+	public ArtistPricingItemReader(DataSource dataSource) {
 		this.dataSource=dataSource;
 	}
 	
@@ -31,7 +31,7 @@ public class ArtistDataReader {
 		return jdbcPagingItemReader.dataSource(dataSource)
 			.name("jdbcCursorItemReaderPricing")
 			.queryProvider(queryProvider())
-			.rowMapper(new ArtistDbRowMapper())
+			.rowMapper(new ArtistPricingRowMapper())
 			.pageSize(10)
 			.build();
 	}

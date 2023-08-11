@@ -7,7 +7,7 @@ import org.springframework.jdbc.core.RowMapper;
 
 import io.beatbonds.model.ArtistFromSpotifyDb;
 
-public class ArtistDbRowMapper implements RowMapper<ArtistFromSpotifyDb>{
+public class ArtistPricingRowMapper implements RowMapper<ArtistFromSpotifyDb>{
 
 	@Override
 	public ArtistFromSpotifyDb mapRow(ResultSet rs, int rowNum) throws SQLException {

@@ -7,7 +7,7 @@ import org.springframework.batch.item.database.ItemPreparedStatementSetter;
 
 import io.beatbonds.model.ArtistWithCalculatedPrice;
 
-public class ArtistDbItemPreparedStatementSetter implements ItemPreparedStatementSetter<ArtistWithCalculatedPrice>{
+public class ArtistPricingItemPreparedStatementSetter implements ItemPreparedStatementSetter<ArtistWithCalculatedPrice>{
 
 	@Override
 	public void setValues(ArtistWithCalculatedPrice item, PreparedStatement ps) throws SQLException {
