@@ -1,11 +1,19 @@
 package io.beatbonds.configuration;
 
+import java.util.Date;
+
 import javax.sql.DataSource;
 
 import org.springframework.batch.core.Job;
+import org.springframework.batch.core.JobParametersBuilder;
+import org.springframework.batch.core.JobParametersInvalidException;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
+import org.springframework.batch.core.launch.JobLauncher;
+import org.springframework.batch.core.repository.JobExecutionAlreadyRunningException;
+import org.springframework.batch.core.repository.JobInstanceAlreadyCompleteException;
+import org.springframework.batch.core.repository.JobRestartException;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
@@ -15,6 +23,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.task.TaskExecutor;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import io.beatbonds.model.ArtistDb;
@@ -29,23 +39,32 @@ public class ArtistPricingBatchConfigure {
 	
 	private DataSource dataSource;
 	
+	private JobLauncher jobLauncher;
+	
+	private JdbcTemplate jdbcTemplate;
+	
 	@Autowired
 	public ArtistPricingBatchConfigure(JobBuilderFactory jobBuilderFactory,
 				StepBuilderFactory stepBuilderFactory,
-				DataSource dataSource) {
+				DataSource dataSource,
+				JobLauncher jobLauncher,
+				JdbcTemplate jdbcTemplate) {
 		this.jobBuilderFactory=jobBuilderFactory;
 		this.stepBuilderFactory=stepBuilderFactory;
 		this.dataSource=dataSource;
+		this.jobLauncher=jobLauncher;
+		this.jdbcTemplate=jdbcTemplate;
 	}
 	
-	@Bean
-	public PagingQueryProvider queryProvider() throws Exception {
-		SqlPagingQueryProviderFactoryBean factory = new SqlPagingQueryProviderFactoryBean();
-		factory.setSelectClause("select artist_id, artist, popularity, followers, image");
-		factory.setFromClause("from beatbondsartist.artists_details");
-		factory.setSortKey("artist_id");
-		factory.setDataSource(dataSource);
-		return factory.getObject();
+// Writing in DB1(SQL) completed. NoSQL remaining.
+	
+//	fixedRate = 3 * 60 * 60 * 1000
+//	fixedRate = 300000 (5 min)
+	@Scheduled(initialDelay = 0, fixedRate = 3 * 60 * 60 * 1000)
+	public void runJob() throws JobExecutionAlreadyRunningException, JobRestartException, JobInstanceAlreadyCompleteException, JobParametersInvalidException, Exception {
+		JobParametersBuilder paramBuilder = new JobParametersBuilder();
+		paramBuilder.addDate("runTime", new Date());
+		this.jobLauncher.run(job(), paramBuilder.toJobParameters());
 	}
 	
 	@Bean
@@ -55,7 +74,7 @@ public class ArtistPricingBatchConfigure {
 	
 	@Bean
 	public ItemWriter<ArtistPricedDb> itemWriter(){
-		return new ArtistDbItemWriter();
+		return new ArtistDbItemWriter(dataSource).itemWriter();
 	}
 	
 	@Bean
@@ -84,9 +103,38 @@ public class ArtistPricingBatchConfigure {
 	}
 	
 	@Bean
+    public Step dropTableStep() {
+        return stepBuilderFactory.get("dropTableStep")
+                .tasklet((contribution, chunkContext) -> {
+                    jdbcTemplate.execute("DROP TABLE IF EXISTS beatbondsartist.artists_details_pricing");
+                    return null;
+                })
+                .build();
+    }
+	
+	@Bean
+    public Step createTableStep() {
+        return stepBuilderFactory.get("createTableStep")
+                .tasklet((contribution, chunkContext) -> {
+                    jdbcTemplate.execute("CREATE TABLE beatbondsartist.artists_details_pricing (\n"
+                    		+ "    artist_id INT AUTO_INCREMENT PRIMARY KEY,\n"
+                    		+ "    artist VARCHAR(255),\n"
+                    		+ "    popularity BIGINT,\n"
+                    		+ "    followers BIGINT,\n"
+                    		+ "    image VARCHAR(255),\n"
+                    		+"     price BIGINT\n"
+                    		+ ")");
+                    return null;
+                })
+                .build();
+    }
+	
+	@Bean
 	public Job job() throws Exception {
 		return this.jobBuilderFactory.get("artistDbJob")
-				.start(chunkBasedStep())
+				.start(dropTableStep())
+				.next(createTableStep())
+				.next(chunkBasedStep())
 				.build();
 	}
 }
