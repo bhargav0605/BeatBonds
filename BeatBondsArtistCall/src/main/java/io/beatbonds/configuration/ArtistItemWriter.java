@@ -6,13 +6,13 @@ import org.springframework.batch.item.ItemWriter;
 import org.springframework.batch.item.database.builder.JdbcBatchItemWriterBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import io.beatbonds.model.ArtistDb;
+import io.beatbonds.model.ArtistFromSpotify;
 
 public class ArtistItemWriter {
 	
 private DataSource dataSource;
 	
-	private JdbcBatchItemWriterBuilder<ArtistDb> jdbcBatchItemWriterBuilder;
+	private JdbcBatchItemWriterBuilder<ArtistFromSpotify> jdbcBatchItemWriterBuilder;
 	
 	public static String INSERT_ARTIST_SQL = 
 			"insert into beatbondsartist.artists_details(artist, popularity, followers, image) values(?,?,?,?)";
@@ -22,8 +22,8 @@ private DataSource dataSource;
 		this.dataSource=dataSource;
 	}
 	
-	public ItemWriter<ArtistDb> itemWriter(){
-		this.jdbcBatchItemWriterBuilder = new JdbcBatchItemWriterBuilder<ArtistDb>();
+	public ItemWriter<ArtistFromSpotify> itemWriter(){
+		this.jdbcBatchItemWriterBuilder = new JdbcBatchItemWriterBuilder<ArtistFromSpotify>();
 		return jdbcBatchItemWriterBuilder
 		.dataSource(dataSource)
 		.sql(INSERT_ARTIST_SQL)

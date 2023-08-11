@@ -12,10 +12,10 @@ import org.springframework.batch.item.ItemProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import io.beatbonds.model.Artist;
-import io.beatbonds.model.ArtistDb;
+import io.beatbonds.model.ArtistFromSpotify;
 import io.beatbonds.shared.SharedData;
 
-public class ArtistItemProcessor implements ItemProcessor<Artist, ArtistDb> {
+public class ArtistItemProcessor implements ItemProcessor<Artist, ArtistFromSpotify> {
 	
 	@Autowired
 	private SharedData sharedData;
@@ -24,9 +24,9 @@ public class ArtistItemProcessor implements ItemProcessor<Artist, ArtistDb> {
 
 
 	@Override
-	public ArtistDb process(Artist item) throws Exception {
+	public ArtistFromSpotify process(Artist item) throws Exception {
 
-		ArtistDb artstDb = new ArtistDb();
+		ArtistFromSpotify artstDb = new ArtistFromSpotify();
 		
 		
 		String apiUrl = "https://api.spotify.com/v1/search";

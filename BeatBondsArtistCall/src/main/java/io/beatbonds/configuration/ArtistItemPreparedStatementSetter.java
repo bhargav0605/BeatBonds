@@ -6,12 +6,12 @@ import java.sql.SQLException;
 import org.springframework.batch.item.database.ItemPreparedStatementSetter;
 
 import io.beatbonds.model.Artist;
-import io.beatbonds.model.ArtistDb;
+import io.beatbonds.model.ArtistFromSpotify;
 
-public class ArtistItemPreparedStatementSetter implements ItemPreparedStatementSetter<ArtistDb> {
+public class ArtistItemPreparedStatementSetter implements ItemPreparedStatementSetter<ArtistFromSpotify> {
 
 	@Override
-	public void setValues(ArtistDb item, PreparedStatement ps) throws SQLException {
+	public void setValues(ArtistFromSpotify item, PreparedStatement ps) throws SQLException {
 //		ps.setInt(1, item.getId());
 		ps.setString(1, item.getName());
 		ps.setLong(2, item.getPopularity());

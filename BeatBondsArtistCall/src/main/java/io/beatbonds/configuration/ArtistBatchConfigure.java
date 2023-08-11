@@ -30,7 +30,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import io.beatbonds.model.Artist;
-import io.beatbonds.model.ArtistDb;
+import io.beatbonds.model.ArtistFromSpotify;
 import io.beatbonds.shared.SharedData;
 
 @Configuration
@@ -87,12 +87,12 @@ public class ArtistBatchConfigure {
 	}
 	
 	@Bean
-	public ItemWriter<ArtistDb> itemWriter(){
+	public ItemWriter<ArtistFromSpotify> itemWriter(){
 		return new ArtistItemWriter(dataSource).itemWriter();
 	}
 	
 	@Bean
-	public ItemProcessor<Artist, ArtistDb> trackedArtistItemProcessor() {
+	public ItemProcessor<Artist, ArtistFromSpotify> trackedArtistItemProcessor() {
 		return new ArtistItemProcessor(); 
 	}
 	
@@ -107,7 +107,7 @@ public class ArtistBatchConfigure {
 	@Bean
 	public Step chunkBasedStep() throws Exception {
 		return this.stepBuilderFactory.get("chunkBasedStep")
-				.<Artist, ArtistDb>chunk(10)
+				.<Artist, ArtistFromSpotify>chunk(10)
 				.reader(itemReader())
 				.processor(trackedArtistItemProcessor())
 				.writer(itemWriter())
