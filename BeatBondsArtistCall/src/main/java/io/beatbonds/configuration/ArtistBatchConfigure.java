@@ -17,10 +17,6 @@ import org.springframework.batch.core.repository.JobRestartException;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
-import org.springframework.batch.item.database.PagingQueryProvider;
-import org.springframework.batch.item.database.builder.JdbcBatchItemWriterBuilder;
-import org.springframework.batch.item.database.builder.JdbcPagingItemReaderBuilder;
-import org.springframework.batch.item.database.support.SqlPagingQueryProviderFactoryBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -44,8 +40,6 @@ public class ArtistBatchConfigure {
 	
 	private JobLauncher jobLauncher;
 	
-	private SharedTokenData sharedData;
-	
 	private JdbcTemplate jdbcTemplate;
 	
 	
@@ -61,14 +55,12 @@ public class ArtistBatchConfigure {
 			StepBuilderFactory stepBuilderFactory, 
 			DataSource dataSource,
 			JobLauncher jobLauncher,
-			SharedTokenData sharedData,
 			JdbcTemplate jdbcTemplate
 			) {
 		this.jobBuilderFactory=jobBuilderFactory;
 		this.stepBuilderFactory=stepBuilderFactory;
 		this.dataSource=dataSource;
 		this.jobLauncher=jobLauncher;
-		this.sharedData=sharedData;
 		this.jdbcTemplate=jdbcTemplate;
 	}
 	

@@ -91,7 +91,6 @@ public class ArtistItemProcessor implements ItemProcessor<Artist, ArtistFromSpot
 			e.getMessage();
 		}
 		
-//		artst.setName(Long.toString(popularity));
         artstDb.setName(item.getName());
         artstDb.setPopularity(popularity);
         artstDb.setFollowers(followers);

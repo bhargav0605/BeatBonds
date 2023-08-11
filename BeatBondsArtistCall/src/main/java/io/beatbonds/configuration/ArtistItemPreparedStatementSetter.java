@@ -12,7 +12,6 @@ public class ArtistItemPreparedStatementSetter implements ItemPreparedStatementS
 
 	@Override
 	public void setValues(ArtistFromSpotify item, PreparedStatement ps) throws SQLException {
-//		ps.setInt(1, item.getId());
 		ps.setString(1, item.getName());
 		ps.setLong(2, item.getPopularity());
 		ps.setLong(3, item.getFollowers());

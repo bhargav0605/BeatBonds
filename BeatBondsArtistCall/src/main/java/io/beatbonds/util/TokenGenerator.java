@@ -10,12 +10,9 @@ import java.util.Base64;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
-import javax.sql.DataSource;
 
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import io.beatbonds.shared.SharedTokenData;
