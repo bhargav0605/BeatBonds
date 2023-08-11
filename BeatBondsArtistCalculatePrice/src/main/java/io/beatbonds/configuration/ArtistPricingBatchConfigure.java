@@ -27,8 +27,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
-import io.beatbonds.model.ArtistDb;
-import io.beatbonds.model.ArtistPricedDb;
+import io.beatbonds.model.ArtistFromSpotifyDb;
+import io.beatbonds.model.ArtistWithCalculatedPrice;
 
 @Configuration
 public class ArtistPricingBatchConfigure {
@@ -68,17 +68,17 @@ public class ArtistPricingBatchConfigure {
 	}
 	
 	@Bean
-	public ItemReader<ArtistDb> itemReader() throws Exception{
+	public ItemReader<ArtistFromSpotifyDb> itemReader() throws Exception{
 		return new ArtistDataReader(dataSource).itemReader();
 	}
 	
 	@Bean
-	public ItemWriter<ArtistPricedDb> itemWriter(){
+	public ItemWriter<ArtistWithCalculatedPrice> itemWriter(){
 		return new ArtistDbItemWriter(dataSource).itemWriter();
 	}
 	
 	@Bean
-	public ItemProcessor<ArtistDb, ArtistPricedDb> itemProcessor(){
+	public ItemProcessor<ArtistFromSpotifyDb, ArtistWithCalculatedPrice> itemProcessor(){
 		return new ArtistDbItemProcessor();
 	}
 	
@@ -94,7 +94,7 @@ public class ArtistPricingBatchConfigure {
 	@Bean
 	public Step chunkBasedStep() throws Exception {
 		return this.stepBuilderFactory.get("artistDbChunkBasedStep")
-				.<ArtistDb, ArtistPricedDb>chunk(10)
+				.<ArtistFromSpotifyDb, ArtistWithCalculatedPrice>chunk(10)
 				.reader(itemReader())
 				.processor(itemProcessor())
 				.writer(itemWriter())

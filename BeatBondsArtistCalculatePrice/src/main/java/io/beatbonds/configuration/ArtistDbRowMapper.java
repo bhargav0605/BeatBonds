@@ -5,13 +5,13 @@ import java.sql.SQLException;
 
 import org.springframework.jdbc.core.RowMapper;
 
-import io.beatbonds.model.ArtistDb;
+import io.beatbonds.model.ArtistFromSpotifyDb;
 
-public class ArtistDbRowMapper implements RowMapper<ArtistDb>{
+public class ArtistDbRowMapper implements RowMapper<ArtistFromSpotifyDb>{
 
 	@Override
-	public ArtistDb mapRow(ResultSet rs, int rowNum) throws SQLException {
-		ArtistDb artistDb = new ArtistDb();
+	public ArtistFromSpotifyDb mapRow(ResultSet rs, int rowNum) throws SQLException {
+		ArtistFromSpotifyDb artistDb = new ArtistFromSpotifyDb();
 		artistDb.setName(rs.getString("artist"));
 		artistDb.setPopularity(rs.getLong("popularity"));
 		artistDb.setFollowers(rs.getLong("followers"));

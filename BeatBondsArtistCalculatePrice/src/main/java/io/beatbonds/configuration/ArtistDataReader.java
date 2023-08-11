@@ -14,7 +14,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 
-import io.beatbonds.model.ArtistDb;
+import io.beatbonds.model.ArtistFromSpotifyDb;
 
 public class ArtistDataReader {
 	private DataSource dataSource;
@@ -24,10 +24,10 @@ public class ArtistDataReader {
 		this.dataSource=dataSource;
 	}
 	
-	private JdbcPagingItemReaderBuilder<ArtistDb> jdbcPagingItemReader;
+	private JdbcPagingItemReaderBuilder<ArtistFromSpotifyDb> jdbcPagingItemReader;
 	
-	public ItemReader<ArtistDb> itemReader() throws Exception{
-		this.jdbcPagingItemReader = new JdbcPagingItemReaderBuilder<ArtistDb>();
+	public ItemReader<ArtistFromSpotifyDb> itemReader() throws Exception{
+		this.jdbcPagingItemReader = new JdbcPagingItemReaderBuilder<ArtistFromSpotifyDb>();
 		return jdbcPagingItemReader.dataSource(dataSource)
 			.name("jdbcCursorItemReaderPricing")
 			.queryProvider(queryProvider())

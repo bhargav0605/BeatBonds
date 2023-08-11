@@ -9,14 +9,14 @@ import org.springframework.batch.item.database.builder.JdbcBatchItemWriterBuilde
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import io.beatbonds.model.ArtistPricedDb;
+import io.beatbonds.model.ArtistWithCalculatedPrice;
 
 //@Component
 public class ArtistDbItemWriter {
 //	public class ArtistDbItemWriter implements ItemWriter<ArtistPricedDb>{
 	private DataSource dataSource;
 	
-	private JdbcBatchItemWriterBuilder<ArtistPricedDb> jdbcBatchItemWriter;
+	private JdbcBatchItemWriterBuilder<ArtistWithCalculatedPrice> jdbcBatchItemWriter;
 	
 	@Autowired
 	public ArtistDbItemWriter(DataSource dataSource) {
@@ -32,9 +32,9 @@ public class ArtistDbItemWriter {
 //		items.stream().forEach(item->System.out.println(item.toString()));
 //	}
 	
-	public ItemWriter<ArtistPricedDb> itemWriter() {
+	public ItemWriter<ArtistWithCalculatedPrice> itemWriter() {
 		this.jdbcBatchItemWriter 
-			= new JdbcBatchItemWriterBuilder<ArtistPricedDb>();
+			= new JdbcBatchItemWriterBuilder<ArtistWithCalculatedPrice>();
 		return jdbcBatchItemWriter
 			.dataSource(dataSource)
 			.sql(INSERT_ARTIST_PRICING_SQL)

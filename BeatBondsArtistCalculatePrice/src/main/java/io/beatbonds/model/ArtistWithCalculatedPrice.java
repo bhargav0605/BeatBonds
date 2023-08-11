@@ -1,16 +1,16 @@
 package io.beatbonds.model;
 
-public class ArtistPricedDb {
+public class ArtistWithCalculatedPrice {
 	
 	private String name;
 	private Long popularity;
 	private Long followers;
 	private String image;
 	private Long price;
-	public ArtistPricedDb() {
+	public ArtistWithCalculatedPrice() {
 		super();
 	}
-	public ArtistPricedDb(String name, Long popularity, Long followers, String image, Long price) {
+	public ArtistWithCalculatedPrice(String name, Long popularity, Long followers, String image, Long price) {
 		super();
 		this.name = name;
 		this.popularity = popularity;
