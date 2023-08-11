@@ -27,6 +27,8 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import io.beatbonds.model.Artist;
 import io.beatbonds.model.ArtistFromSpotify;
+import io.beatbonds.service.ArtistGetDataService;
+import io.beatbonds.service.ArtistGetDataServiceImpl;
 
 @Configuration
 public class ArtistBatchConfigure {
@@ -41,6 +43,8 @@ public class ArtistBatchConfigure {
 	
 	private JdbcTemplate jdbcTemplate;
 	
+	private ArtistGetDataService artistGetDataService;
+	
 	
 	public static String ARTIST_SQL = "select artist from beatbondsartist.artists order by id";
 	
@@ -54,13 +58,15 @@ public class ArtistBatchConfigure {
 			StepBuilderFactory stepBuilderFactory, 
 			DataSource dataSource,
 			JobLauncher jobLauncher,
-			JdbcTemplate jdbcTemplate
+			JdbcTemplate jdbcTemplate,
+			ArtistGetDataServiceImpl artistGetDataServiceImpl
 			) {
 		this.jobBuilderFactory=jobBuilderFactory;
 		this.stepBuilderFactory=stepBuilderFactory;
 		this.dataSource=dataSource;
 		this.jobLauncher=jobLauncher;
 		this.jdbcTemplate=jdbcTemplate;
+		this.artistGetDataService=artistGetDataServiceImpl;
 	}
 	
 //	fixedRate = 3 * 60 * 60 * 1000
@@ -84,7 +90,7 @@ public class ArtistBatchConfigure {
 	
 	@Bean
 	public ItemProcessor<Artist, ArtistFromSpotify> trackedArtistItemProcessor() {
-		return new ArtistItemProcessor(); 
+		return new ArtistItemProcessor(artistGetDataService); 
 	}
 	
 	@Bean
