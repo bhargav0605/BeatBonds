@@ -27,7 +27,7 @@ public class ArtistpricingItemController {
 		this.artistPricingBatchConfigure=artistPricingBatchConfigure;
 	}
 	
-	@PostMapping("/start-job-b")
+	@PostMapping("/start-calculation-job")
     public ResponseEntity<String> calculatePrice() {
         try {
         	JobParametersBuilder paramBuilder = new JobParametersBuilder();
