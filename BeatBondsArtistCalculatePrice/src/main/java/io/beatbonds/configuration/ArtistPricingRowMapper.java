@@ -11,12 +11,12 @@ public class ArtistPricingRowMapper implements RowMapper<ArtistFromSpotifyDb>{
 
 	@Override
 	public ArtistFromSpotifyDb mapRow(ResultSet rs, int rowNum) throws SQLException {
-		ArtistFromSpotifyDb artistDb = new ArtistFromSpotifyDb();
-		artistDb.setName(rs.getString("artist"));
-		artistDb.setPopularity(rs.getLong("popularity"));
-		artistDb.setFollowers(rs.getLong("followers"));
-		artistDb.setImage(rs.getString("image"));
-		return artistDb;
+		ArtistFromSpotifyDb artistFromSpotifyDb = new ArtistFromSpotifyDb();
+		artistFromSpotifyDb.setName(rs.getString("artist"));
+		artistFromSpotifyDb.setPopularity(rs.getLong("popularity"));
+		artistFromSpotifyDb.setFollowers(rs.getLong("followers"));
+		artistFromSpotifyDb.setImage(rs.getString("image"));
+		return artistFromSpotifyDb;
 	}
 
 }

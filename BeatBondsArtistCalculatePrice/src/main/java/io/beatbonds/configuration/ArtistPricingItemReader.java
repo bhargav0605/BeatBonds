@@ -32,7 +32,6 @@ public class ArtistPricingItemReader {
 	
 	public PagingQueryProvider queryProvider() throws Exception {
 		SqlPagingQueryProviderFactoryBean factory = new SqlPagingQueryProviderFactoryBean();
-		// Need column names
 		factory.setSelectClause("select artist_id, artist, popularity, followers, image");
 		factory.setFromClause("from beatbondsartist.artists_details");
 		factory.setSortKey("artist_id");
