@@ -28,7 +28,7 @@ public class ArtistItemReader {
 				.name("jdbcCursorItemReader")
 				.queryProvider(queryProvider())
 				.rowMapper(new ArtistRowMapper())
-				.pageSize(10)
+				.pageSize(Integer.parseInt(System.getenv("PAGE_SIZE")))
 				.build();
 	}
 	

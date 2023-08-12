@@ -30,7 +30,7 @@ public class JobCompletionListener extends JobExecutionListenerSupport{
         if (jobExecution.getStatus() == BatchStatus.COMPLETED) {
         	try {
         		ResponseEntity<String> responseEntity = restTemplate.postForEntity(
-                        "http://localhost:8181/start-job-b", 
+                        System.getenv("PRICING_SERVICE_URL"), 
                         null, 
                         String.class
                     );

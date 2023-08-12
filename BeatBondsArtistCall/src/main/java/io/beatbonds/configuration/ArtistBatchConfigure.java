@@ -69,7 +69,7 @@ public class ArtistBatchConfigure {
 //	fixedRate = 3 * 60 * 60 * 1000
 //	fixedRate = 300000 (5 min)
 //	fixedRate = 3 * 60 * 60 * 1000 (5 hour)
-	@Scheduled(initialDelay = 0, fixedRate = 300000)
+	@Scheduled(initialDelay = 0, fixedRate=300000)
 	public void runJob() throws JobExecutionAlreadyRunningException, JobRestartException, JobInstanceAlreadyCompleteException, JobParametersInvalidException, Exception {
 		artistGetDataService.init();
 		JobParametersBuilder paramBuilder = new JobParametersBuilder();
@@ -95,15 +95,15 @@ public class ArtistBatchConfigure {
 	@Bean
 	public TaskExecutor taskExecutor() {
 		ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
-		executor.setCorePoolSize(6);
-		executor.setMaxPoolSize(20);
+		executor.setCorePoolSize(Integer.parseInt(System.getenv("CORE_POOL_SIZE")));
+		executor.setMaxPoolSize(Integer.parseInt(System.getenv("MAX_CORE_POOL_SIZE")));
 		return executor;
 	}
 	
 	@Bean
 	public Step chunkBasedStep() throws Exception {
 		return this.stepBuilderFactory.get("chunkBasedStep")
-				.<Artist, ArtistFromSpotify>chunk(10)
+				.<Artist, ArtistFromSpotify>chunk(Integer.parseInt(System.getenv("CHUNK_SIZE")))
 				.reader(itemReader())
 				.processor(trackedArtistItemProcessor())
 				.writer(itemWriter())

@@ -31,8 +31,8 @@ public class ArtistGetDataServiceImpl implements ArtistGetDataService {
 		ArtistFromSpotify artstDb = new ArtistFromSpotify();
 		
 		// Need environment variable
-		String apiUrl = "https://api.spotify.com/v1/search";
-		
+		String apiUrl = System.getenv("SPOTFY_SEARCH_URL");
+				
 		String q = item.getName().contains(" ")?item.getName().replace(" ", "%20") : item.getName(); 
 
 		String type = "artist";
@@ -97,8 +97,8 @@ public class ArtistGetDataServiceImpl implements ArtistGetDataService {
 	
 	@Override
     public void init() {
-        
-        String apiUrl = "https://accounts.spotify.com/api/token";
+		        
+        String apiUrl = System.getenv("SPOTIFY_TOKEN_URL");
         String spotifyId = System.getenv("SPOTIFY_CLINT_ID");
         String spotifyClientSecret = System.getenv("SPOTIFY_CLIENT_SECRET");
         
