@@ -4,7 +4,7 @@ BeatBonds initial spring batch service which pulls population and followers of a
 ### Task List
 - [x] POC of ItemProcessor, ItemWriter, ItemReader.
 - [x] Testing with Sporify API.
-- [ ] Code Cleanup and Refractoring.
+- [x] Code Cleanup and Refractoring.
 - [ ] Deployment for data analytics. (See how popularity and followers changes according to time, Graph and dashboard.) 
 - [ ] Add Pricing calculation algorithm in analytics.
 - [ ] Observe for ~4 Weeks.
