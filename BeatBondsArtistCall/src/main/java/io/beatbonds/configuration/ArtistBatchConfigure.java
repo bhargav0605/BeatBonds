@@ -45,13 +45,6 @@ public class ArtistBatchConfigure {
 	
 	private ArtistGetDataService artistGetDataService;
 	
-	
-	public static String ARTIST_SQL = "select artist from beatbondsartist.artists order by id";
-	
-	
-	public static String INSERT_ARTIST_SQL = 
-			"insert into beatbondsartist.artists_details(artist, popularity, followers, image) values(?,?,?,?)";
-	
 	@Autowired
 	public ArtistBatchConfigure(
 			JobBuilderFactory jobBuilderFactory,

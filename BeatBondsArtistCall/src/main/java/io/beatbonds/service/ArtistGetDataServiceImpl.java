@@ -37,7 +37,8 @@ public class ArtistGetDataServiceImpl implements ArtistGetDataService {
 		// Need environment variable
 		String apiUrl = "https://api.spotify.com/v1/search";
 		
-		String q = item.getName().contains(" ")?item.getName().replaceAll(" ", "%20") : item.getName(); 
+		//replaceAll
+		String q = item.getName().contains(" ")?item.getName().replace(" ", "%20") : item.getName(); 
 
 		String type = "artist";
 		String limit = "1";
