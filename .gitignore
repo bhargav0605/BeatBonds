@@ -4,6 +4,7 @@
 1.sql
 
 /MySQL-DOCKER/
+build-svc.sh
 
 ### STS ###
 .apt_generated
