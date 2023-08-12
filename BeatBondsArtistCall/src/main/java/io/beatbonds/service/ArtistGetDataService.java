@@ -6,5 +6,6 @@ import io.beatbonds.model.ArtistFromSpotify;
 public interface ArtistGetDataService {
 	
 	ArtistFromSpotify getArtistSpotifyData(Artist item);
+	void init();
 
 }

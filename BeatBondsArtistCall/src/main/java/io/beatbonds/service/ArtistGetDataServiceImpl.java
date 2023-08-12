@@ -8,8 +8,6 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
-import javax.annotation.PostConstruct;
-
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,8 +22,6 @@ public class ArtistGetDataServiceImpl implements ArtistGetDataService {
 	private static final Logger LOGGER = 
 			LoggerFactory.getLogger(ArtistGetDataServiceImpl.class);
 	
-	private long startTime;
-	
 	private String token;
 	private int tokenTime;
 
@@ -37,7 +33,6 @@ public class ArtistGetDataServiceImpl implements ArtistGetDataService {
 		// Need environment variable
 		String apiUrl = "https://api.spotify.com/v1/search";
 		
-		//replaceAll
 		String q = item.getName().contains(" ")?item.getName().replace(" ", "%20") : item.getName(); 
 
 		String type = "artist";
@@ -56,7 +51,6 @@ public class ArtistGetDataServiceImpl implements ArtistGetDataService {
             
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
-//            conn.setRequestProperty("Authorization", "Bearer "+sharedData.getSharedToken());
             conn.setRequestProperty("Authorization", "Bearer "+token);
             conn.setDoOutput(true);
             
@@ -76,21 +70,17 @@ public class ArtistGetDataServiceImpl implements ArtistGetDataService {
                     itemsArr = (JSONObject) jsonResponse.getJSONObject("artists").getJSONArray("items").get(0);
                     imageArr = (JSONObject)itemsArr.getJSONArray("images").get(0);
                     image = imageArr.getString("url");
-                    
-                    LOGGER.info("##########################################");
 
                     popularity=itemsArr.getLong("popularity");
                     followers=itemsArr.getJSONObject("followers").getLong("total");
                     nameArt=itemsArr.getString("name");
                     image = imageArr.getString("url");
 
-                    LOGGER.info(popularity+" "+followers+" "+nameArt+" "+image);
-              
+                    LOGGER.info(nameArt+" "+popularity+" "+followers+" "+image);
                 }
             } else {
-                LOGGER.info("\"POST request failed with response code: \" + responseCode");
+                LOGGER.error("\"POST request failed with response code: \" + responseCode");
             }
-
             conn.disconnect();
             
 		} catch (Exception e) {
@@ -105,16 +95,13 @@ public class ArtistGetDataServiceImpl implements ArtistGetDataService {
 		return artstDb;
 	}
 	
-	@PostConstruct
+	@Override
     public void init() {
-		LOGGER.info("Initialization started at: " + startTime);
         
-        // Token generation call 
         String apiUrl = "https://accounts.spotify.com/api/token";
         String spotifyId = System.getenv("SPOTIFY_CLINT_ID");
         String spotifyClientSecret = System.getenv("SPOTIFY_CLIENT_SECRET");
         
-        // call api
         try {
         	String authHeaderValue = "Basic " + Base64.getEncoder().encodeToString((spotifyId + ":" + spotifyClientSecret).getBytes(StandardCharsets.UTF_8));
         	
@@ -142,30 +129,25 @@ public class ArtistGetDataServiceImpl implements ArtistGetDataService {
                         response.append(inputLine);
                     }                    
                     
-                 // Parse the JSON response
                     JSONObject jsonResponse = new JSONObject(response.toString());
                     
-                    // Access different parameters from the JSON response
                     String accessToken = jsonResponse.getString("access_token");
                     int expiresIn = jsonResponse.getInt("expires_in");
                     String tokenType = jsonResponse.getString("token_type");
                     
                     token = accessToken;
-//                    sharedData.setSharedToken(accessToken);
-                    System.out.println("Access Token: " + token);
                     tokenTime = expiresIn;
-                    System.out.println("Expires In: " + tokenTime);
-                    System.out.println("Token Type: " + tokenType);
-              
+                    LOGGER.info("Access Token: " + token);
+                    LOGGER.info("Expires In: " + tokenTime);
+                    LOGGER.info("Token Type: " + tokenType);
                 }
             } else {
-                LOGGER.info("POST request failed with response code: " + responseCode);
+                LOGGER.error("POST request failed with response code: " + responseCode);
             }
-
             conn.disconnect();
             
 		} catch (Exception e) {
-			e.getMessage();
+			LOGGER.error(e.getMessage());
 		}
     }
 }

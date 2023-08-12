@@ -28,7 +28,6 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import io.beatbonds.model.Artist;
 import io.beatbonds.model.ArtistFromSpotify;
 import io.beatbonds.service.ArtistGetDataService;
-import io.beatbonds.service.ArtistGetDataServiceImpl;
 
 @Configuration
 public class ArtistBatchConfigure {
@@ -36,6 +35,8 @@ public class ArtistBatchConfigure {
 	private JobBuilderFactory jobBuilderFactory;
 	
 	private StepBuilderFactory stepBuilderFactory;
+	
+	private JobCompletionListener jobCompletionListener;
 	
 	private DataSource dataSource;
 	
@@ -45,6 +46,7 @@ public class ArtistBatchConfigure {
 	
 	private ArtistGetDataService artistGetDataService;
 	
+	
 	@Autowired
 	public ArtistBatchConfigure(
 			JobBuilderFactory jobBuilderFactory,
@@ -52,20 +54,24 @@ public class ArtistBatchConfigure {
 			DataSource dataSource,
 			JobLauncher jobLauncher,
 			JdbcTemplate jdbcTemplate,
-			ArtistGetDataServiceImpl artistGetDataServiceImpl
+			ArtistGetDataService artistGetDataService,
+			JobCompletionListener jobCompletionListener
 			) {
 		this.jobBuilderFactory=jobBuilderFactory;
 		this.stepBuilderFactory=stepBuilderFactory;
 		this.dataSource=dataSource;
 		this.jobLauncher=jobLauncher;
 		this.jdbcTemplate=jdbcTemplate;
-		this.artistGetDataService=artistGetDataServiceImpl;
+		this.artistGetDataService=artistGetDataService;
+		this.jobCompletionListener=jobCompletionListener;
 	}
 	
 //	fixedRate = 3 * 60 * 60 * 1000
 //	fixedRate = 300000 (5 min)
-	@Scheduled(initialDelay = 0, fixedRate = 3 * 60 * 60 * 1000)
+//	fixedRate = 3 * 60 * 60 * 1000 (5 hour)
+	@Scheduled(initialDelay = 0, fixedRate = 300000)
 	public void runJob() throws JobExecutionAlreadyRunningException, JobRestartException, JobInstanceAlreadyCompleteException, JobParametersInvalidException, Exception {
+		artistGetDataService.init();
 		JobParametersBuilder paramBuilder = new JobParametersBuilder();
 		paramBuilder.addDate("runTime", new Date());
 		this.jobLauncher.run(job(), paramBuilder.toJobParameters());
@@ -137,6 +143,7 @@ public class ArtistBatchConfigure {
 				.start(dropTableStep())
 				.next(createTableStep())
 				.next(chunkBasedStep())
+				.listener(jobCompletionListener)
 				.build();
 	}
 }

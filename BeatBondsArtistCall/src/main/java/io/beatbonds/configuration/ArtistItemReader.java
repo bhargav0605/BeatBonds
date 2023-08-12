@@ -10,8 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import io.beatbonds.model.Artist;
 
-
 public class ArtistItemReader {
+	
 	private DataSource dataSource;
 	
 	@Autowired
