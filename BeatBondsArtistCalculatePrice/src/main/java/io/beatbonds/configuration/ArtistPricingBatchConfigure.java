@@ -67,15 +67,15 @@ public class ArtistPricingBatchConfigure {
 	@Bean
 	public TaskExecutor taskExecutor() {
 		ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
-		executor.setCorePoolSize(6);
-		executor.setMaxPoolSize(20);
+		executor.setCorePoolSize(Integer.parseInt(System.getenv("CORE_POOL_SIZE")));
+		executor.setMaxPoolSize(Integer.parseInt(System.getenv("MAX_CORE_POOL_SIZE")));
 		return executor;
 	}
 	
 	@Bean
 	public Step chunkBasedStep() throws Exception {
 		return this.stepBuilderFactory.get("artistDbChunkBasedStep")
-				.<ArtistFromSpotifyDb, ArtistWithCalculatedPrice>chunk(10)
+				.<ArtistFromSpotifyDb, ArtistWithCalculatedPrice>chunk(Integer.parseInt(System.getenv("CHUNK_SIZE")))
 				.reader(itemReader())
 				.processor(itemProcessor())
 				.writer(itemWriter())
