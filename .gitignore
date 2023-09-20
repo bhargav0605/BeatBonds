@@ -7,6 +7,7 @@
 build-svc.sh
 /k8/
 
+.ArtistCalculatePricingServiceImpl.java
 ### STS ###
 .apt_generated
 .classpath
