@@ -7,7 +7,7 @@ BeatBonds initial spring batch service which pulls population and followers of a
 - [x] ~~Code Cleanup and Refractoring.~~
 - [ ] Deployment for data analytics. (See how popularity and followers changes according to time, Graph and dashboard.) 
 - [x] ~~Add Pricing calculation algorithm in analytics.~~
-- [x] ~~Observe for ~4 Weeks.~~
+- [x] ~~Observe for 4 Weeks.~~
 - [ ] POC with Kafka.
 - [ ] Test Spotify api with kafka and database.
 
