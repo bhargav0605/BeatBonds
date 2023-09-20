@@ -15,7 +15,8 @@ public class ArtistPricingItemPreparedStatementSetter implements ItemPreparedSta
 		ps.setLong(2, item.getPopularity());
 		ps.setLong(3, item.getFollowers());
 		ps.setString(4, item.getImage());
-		ps.setLong(5, item.getPrice());
+		ps.setDouble(5, item.getPrice());
+//		ps.setLong(5, item.getPrice());
 		
 	}
 

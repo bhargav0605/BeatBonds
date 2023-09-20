@@ -6,11 +6,12 @@ public class ArtistWithCalculatedPrice {
 	private Long popularity;
 	private Long followers;
 	private String image;
-	private Long price;
+//	private Long price;
+	private Double price;
 	public ArtistWithCalculatedPrice() {
 		super();
 	}
-	public ArtistWithCalculatedPrice(String name, Long popularity, Long followers, String image, Long price) {
+	public ArtistWithCalculatedPrice(String name, Long popularity, Long followers, String image, Double price) {
 		super();
 		this.name = name;
 		this.popularity = popularity;
@@ -42,10 +43,10 @@ public class ArtistWithCalculatedPrice {
 	public void setImage(String image) {
 		this.image = image;
 	}
-	public Long getPrice() {
+	public Double getPrice() {
 		return price;
 	}
-	public void setPrice(Long price) {
+	public void setPrice(Double price) {
 		this.price = price;
 	}
 	@Override
