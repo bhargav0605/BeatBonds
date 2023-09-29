@@ -103,7 +103,8 @@ public class ArtistPricingBatchConfigure {
                     		+ "    popularity BIGINT,\n"
                     		+ "    followers BIGINT,\n"
                     		+ "    image VARCHAR(255),\n"
-                    		+"     price DECIMAL(10, 2)\n"
+                    		+"     price DECIMAL(10, 2),\n"
+                    		+"     datetime DATETIME\n"
                     		+ ")");
                     return null;
                 })

@@ -23,11 +23,11 @@ public class ArtistPricingItemWriter {
 	}
 	
 	private final static String INSERT_ARTIST_PRICING_SQL = 
-			"insert into beatbondsartist.artists_details_pricing(artist, popularity, followers, image, price) values(?,?,?,?,?)";
-	
+	"insert into beatbondsartist.artists_details_pricing(artist, popularity, followers, image, price, datetime) values(?,?,?,?,?,?)";
+
 	private final static String INSERT_ARTIST_PRICING_ANALYSIS_SQL = 
-			"insert into beatbondsartist.artists_details_pricing_analysis(artist, popularity, followers, image, price) values(?,?,?,?,?)";
-	
+	"insert into beatbondsartist.artists_details_pricing_analysis(artist, popularity, followers, image, price, datetime) values(?,?,?,?,?,?)";
+
 	public ItemWriter<ArtistWithCalculatedPrice> itemWriter() {
         List<ItemWriter<? super ArtistWithCalculatedPrice>> writers = new ArrayList<>();
 

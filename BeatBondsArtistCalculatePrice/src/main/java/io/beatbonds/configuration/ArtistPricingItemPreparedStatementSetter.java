@@ -2,6 +2,7 @@ package io.beatbonds.configuration;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 
 import org.springframework.batch.item.database.ItemPreparedStatementSetter;
 
@@ -16,8 +17,6 @@ public class ArtistPricingItemPreparedStatementSetter implements ItemPreparedSta
 		ps.setLong(3, item.getFollowers());
 		ps.setString(4, item.getImage());
 		ps.setDouble(5, item.getPrice());
-//		ps.setLong(5, item.getPrice());
-		
+		ps.setTimestamp(6, Timestamp.valueOf(item.getDatetime()));	
 	}
-
 }
