@@ -130,7 +130,8 @@ public class ArtistBatchConfigure {
                     		+ "    artist VARCHAR(255),\n"
                     		+ "    popularity BIGINT,\n"
                     		+ "    followers BIGINT,\n"
-                    		+ "    image VARCHAR(255)\n"
+                    		+ "    image VARCHAR(255),\n"
+                    		+ "    datetime DATETIME\n"
                     		+ ")");
                     return null;
                 })

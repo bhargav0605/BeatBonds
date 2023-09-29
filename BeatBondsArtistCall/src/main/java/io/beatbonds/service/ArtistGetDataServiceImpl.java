@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
 import java.util.Base64;
 
 import org.json.JSONObject;
@@ -91,7 +92,7 @@ public class ArtistGetDataServiceImpl implements ArtistGetDataService {
         artstDb.setPopularity(popularity);
         artstDb.setFollowers(followers);
         artstDb.setImage(image);
-
+        artstDb.setDatetime(LocalDateTime.now());
 		return artstDb;
 	}
 	

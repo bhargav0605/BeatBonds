@@ -20,5 +20,4 @@ public class ArtistItemProcessor implements ItemProcessor<Artist, ArtistFromSpot
 	public ArtistFromSpotify process(Artist item) throws Exception {
 		return artistGetDataService.getArtistSpotifyData(item);
 	}
-
 }

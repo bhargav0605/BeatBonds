@@ -15,7 +15,7 @@ private DataSource dataSource;
 	private JdbcBatchItemWriterBuilder<ArtistFromSpotify> jdbcBatchItemWriterBuilder;
 	
 	private final static String INSERT_ARTIST_SQL = 
-			"insert into beatbondsartist.artists_details(artist, popularity, followers, image) values(?,?,?,?)";
+	"insert into beatbondsartist.artists_details(artist, popularity, followers, image, datetime) values(?,?,?,?,?)";
 	
 	@Autowired
 	public ArtistItemWriter(DataSource dataSource) {
