@@ -30,8 +30,6 @@ public class ArtistPricingBatchConfigure {
 	
 	private DataSource dataSource;
 	
-	private JdbcTemplate jdbcTemplate;
-	
 	private ArtistCalculatePricingService artistCalculatePricingService;
 	
 	@Autowired
@@ -44,7 +42,6 @@ public class ArtistPricingBatchConfigure {
 		this.jobBuilderFactory=jobBuilderFactory;
 		this.stepBuilderFactory=stepBuilderFactory;
 		this.dataSource=dataSource;
-		this.jdbcTemplate=jdbcTemplate;
 		this.artistCalculatePricingService=artistCalculatePricingService;
 	}
 	
@@ -83,40 +80,52 @@ public class ArtistPricingBatchConfigure {
 				.build();
 	}
 	
-	@Bean
-    public Step dropTableStep() {
-        return stepBuilderFactory.get("dropTableStep")
-                .tasklet((contribution, chunkContext) -> {
-                    jdbcTemplate.execute("DROP TABLE IF EXISTS beatbondsartist.artists_details_pricing");
-                    return null;
-                })
-                .build();
-    }
+	/*
+	 * @enhancement 
+	 * Stop dropping table Just update the values instead of inserting new record again.
+	 * It will save the ID of the artist which will be helpful for the pricing.
+	 */
+//	@Bean
+//    public Step dropTableStep() {
+//        return stepBuilderFactory.get("dropTableStep")
+//                .tasklet((contribution, chunkContext) -> {
+//                    jdbcTemplate.execute("DROP TABLE IF EXISTS beatbondsartist.artists_details_pricing");
+//                    return null;
+//                })
+//                .build();
+//    }
 	
-	@Bean
-    public Step createTableStep() {
-        return stepBuilderFactory.get("createTableStep")
-                .tasklet((contribution, chunkContext) -> {
-                    jdbcTemplate.execute("CREATE TABLE beatbondsartist.artists_details_pricing (\n"
-                    		+ "    artist_id INT AUTO_INCREMENT PRIMARY KEY,\n"
-                    		+ "    artist VARCHAR(255),\n"
-                    		+ "    popularity BIGINT,\n"
-                    		+ "    followers BIGINT,\n"
-                    		+ "    image VARCHAR(255),\n"
-                    		+"     price DECIMAL(10, 2),\n"
-                    		+"     datetime DATETIME\n"
-                    		+ ")");
-                    return null;
-                })
-                .build();
-    }
+//	@Bean
+//    public Step createTableStep() {
+//        return stepBuilderFactory.get("createTableStep")
+//                .tasklet((contribution, chunkContext) -> {
+//                    jdbcTemplate.execute("CREATE TABLE beatbondsartist.artists_details_pricing (\n"
+//                    		+ "    artist_id INT AUTO_INCREMENT PRIMARY KEY,\n"
+//                    		+ "    artist VARCHAR(255),\n"
+//                    		+ "    popularity BIGINT,\n"
+//                    		+ "    followers BIGINT,\n"
+//                    		+ "    image VARCHAR(255),\n"
+//                    		+"     price DECIMAL(10, 2),\n"
+//                    		+"     datetime DATETIME\n"
+//                    		+ ")");
+//                    return null;
+//                })
+//                .build();
+//    }
+	
+//	@Bean
+//	public Job job() throws Exception {
+//		return this.jobBuilderFactory.get("artistDbJob")
+//				.start(dropTableStep())
+//				.next(createTableStep())
+//				.next(chunkBasedStep())
+//				.build();
+//	}
 	
 	@Bean
 	public Job job() throws Exception {
 		return this.jobBuilderFactory.get("artistDbJob")
-				.start(dropTableStep())
-				.next(createTableStep())
-				.next(chunkBasedStep())
+				.start(chunkBasedStep())
 				.build();
 	}
 }
