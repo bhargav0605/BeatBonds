@@ -1,0 +1,26 @@
+<configuration>
+
+	<!-- <appender name="FILE" class="ch.qos.logback.core.FileAppender">  -->
+	<appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<!-- <file>/home/bhargav/beatbonds-logs/BeatBondsArtistCall.log</file>  -->
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <FileNamePattern>/home/mtpc-244/BeatBonds/logs/BeatBondsArtistMain-%d{yyyy-MM-dd}.log</FileNamePattern>
+            <MaxHistory>7</MaxHistory> <!-- Keep logs for 7 days -->
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+    
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+    
+    <root level="${LOG_LEVEL}">
+        <appender-ref ref="FILE" />
+        <appender-ref ref="CONSOLE" />
+    </root>
+
+</configuration>
