@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.beatbonds.exceptions.ArtistNotFoundException;
 import io.beatbonds.model.Artist;
 import io.beatbonds.service.ArtistService;
 
@@ -27,14 +28,14 @@ public class ArtistController {
 	}
 	
 	@GetMapping("/artists")
-	public ResponseEntity<List<Artist>> getAllArtist(){
+	public ResponseEntity<List<Artist>> getAllArtist() throws ArtistNotFoundException{
 		List<Artist> listOfAllArtist = null;
-		try {
-			listOfAllArtist = artistService.fetchAllArtists();
-			// Need to create custom exception
-		} catch (Exception e) {
-			LOGGER.error(e.getMessage());
+		listOfAllArtist = artistService.fetchAllArtists();
+
+		if(listOfAllArtist == null) {
+			throw new ArtistNotFoundException("Empty");
+		} else {
+			return new ResponseEntity<>(listOfAllArtist, HttpStatus.OK);
 		}
-		return new ResponseEntity<>(listOfAllArtist, HttpStatus.OK);
 	}
 }
