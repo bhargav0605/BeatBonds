@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,9 +31,10 @@ public class ArtistController {
 		List<Artist> listOfAllArtist = null;
 		try {
 			listOfAllArtist = artistService.fetchAllArtists();
+			// Need to create custom exception
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage());
 		}
-		return ResponseEntity.ok(listOfAllArtist);
+		return new ResponseEntity<>(listOfAllArtist, HttpStatus.OK);
 	}
 }

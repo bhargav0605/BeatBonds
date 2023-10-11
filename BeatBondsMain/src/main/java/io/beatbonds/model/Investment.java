@@ -1,7 +1,8 @@
 package io.beatbonds.model;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -10,31 +11,44 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-//@Entity
-//@Table(name="investments")
+@Entity
+@Table(name="investments")
 public class Investment {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "investment_id")
 	private Long investmentId;
 	
-	private Long userId;
+	@ManyToOne
+	@JoinColumn(name = "user_id")
+	private User user;
 	
-	private Long artistId;
+	@ManyToOne
+	@JoinColumn(name = "artist_id")
+	private Artist artist;
 	
+	@Column(name = "amount_invested")
 	private Long amountInvested;
 	
-	private Date investmentDate;
+	@Column(name = "investment_date")
+	private LocalDateTime investmentDate;
 
 	public Investment() {
 		super();
 	}
 
-	public Investment(Long investmentId, Long userId, Long artistId, Long amountInvested, Date investmentDate) {
+	public Investment(Long amountInvested, LocalDateTime investmentDate) {
 		super();
-		this.investmentId = investmentId;
-		this.userId = userId;
-		this.artistId = artistId;
+		this.amountInvested = amountInvested;
+		this.investmentDate = investmentDate;
+	}
+	
+	
+	public Investment(User user, Artist artist, Long amountInvested, LocalDateTime investmentDate) {
+		super();
+		this.user = user;
+		this.artist = artist;
 		this.amountInvested = amountInvested;
 		this.investmentDate = investmentDate;
 	}
@@ -47,22 +61,6 @@ public class Investment {
 		this.investmentId = investmentId;
 	}
 
-	public Long getUserId() {
-		return userId;
-	}
-
-	public void setUserId(Long userId) {
-		this.userId = userId;
-	}
-
-	public Long getArtistId() {
-		return artistId;
-	}
-
-	public void setArtistId(Long artistId) {
-		this.artistId = artistId;
-	}
-
 	public Long getAmountInvested() {
 		return amountInvested;
 	}
@@ -71,17 +69,27 @@ public class Investment {
 		this.amountInvested = amountInvested;
 	}
 
-	public Date getInvestmentDate() {
+	public LocalDateTime getInvestmentDate() {
 		return investmentDate;
 	}
 
-	public void setInvestmentDate(Date investmentDate) {
+	public void setInvestmentDate(LocalDateTime investmentDate) {
 		this.investmentDate = investmentDate;
 	}
 
-	@Override
-	public String toString() {
-		return "Investment [investmentId=" + investmentId + ", userId=" + userId + ", artistId=" + artistId
-				+ ", amountInvested=" + amountInvested + ", investmentDate=" + investmentDate + "]";
+	public Long getUser() {
+		return this.user.getUserId();
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+	public Long getArtist() {
+		return this.artist.getArtistId();
+	}
+
+	public void setArtist(Artist artist) {
+		this.artist = artist;
 	}
 }

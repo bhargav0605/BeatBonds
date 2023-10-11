@@ -7,17 +7,17 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import io.beatbonds.model.Artist;
-import io.beatbonds.repository.ArtistReposiitory;
+import io.beatbonds.repository.ArtistRepository;
 
 @Service
 public class ArtistServiceImpl implements ArtistService {
 	
-	private ArtistReposiitory artistRepository;
+	private ArtistRepository artistRepository;
 	
 	private static final Logger LOGGER = 
 			LoggerFactory.getLogger(ArtistServiceImpl.class);
 	
-	public ArtistServiceImpl(ArtistReposiitory artistRepository) {
+	public ArtistServiceImpl(ArtistRepository artistRepository) {
 		this.artistRepository=artistRepository;
 	}
 
